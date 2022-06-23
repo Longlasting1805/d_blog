@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 
-class blog_model(models.Model):
+class BlogModel(models.Model):
     author = models.CharField(max_length=100, null=True)
     title = models.CharField(max_length=200, null=True)
     content = models.CharField(max_length=100, null=True)
