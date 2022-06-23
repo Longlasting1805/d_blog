@@ -49,8 +49,8 @@ class blog_details(APIView):
             return Response
 
     def put(self, request, id):
-        article = self.get_object(id)
-        serializer = blog_serializer(article, data=request.data)
+        blog = self.get_object(id)
+        serializer = blog_serializer(blog, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
