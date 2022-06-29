@@ -1,24 +1,38 @@
+import permission as permission
 from django.shortcuts import render
 
 # Create your views here.
 
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
-from rest_framework import status
+from rest_framework import status, permissions
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.core.paginator import Paginator
 from rest_framework import viewsets
-
+# from rest_framework.permissions import BasePermission, IsAdminUser, SAFE_METHODS
 from .models import BlogModel
 from .serializers import BlogSerializer
 
 
 # Create your views here.
 
+class BlogUserWritePermission(permissions.BasePermission):
+    message = 'Editing post is restricted to the author only.'
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return obj.id == request.user
+
+
 class BlogView(viewsets.ModelViewSet):
     queryset = BlogModel.objects.all()
     serializer_class = BlogSerializer
+    permission_classes = [IsAuthenticated]
+
 
 #     def get(self, request):
 #         blog = BlogModel.objects.all()
